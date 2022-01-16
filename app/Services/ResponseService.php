@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 class ResponseService
 {
 
-    public function result($data, $code)
+    public function result($data, $code = 200)
     {
         $result = [
             'status' => $code,

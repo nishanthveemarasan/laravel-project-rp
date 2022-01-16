@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,14 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('v1')->name('api.v1.')->group(function () {
 
-    Route::prefix('users')->name('users.')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('index'); //api.v1.users.index
-        Route::post('/store', [UserController::class, 'store'])->name('store');
-        Route::get('/{user:uuid}', [UserController::class, 'edit'])->name('edit');
-        Route::patch('/{user:uuid}', [UserController::class, 'update'])->name('update');
-        Route::delete('/{user:uuid}', [UserController::class, 'destroy'])->name('destroy');
-        Route::get('/restore/{user:uuid}', [UserController::class, 'restore'])->name('restore');
+Route::prefix('v1')->middleware(['json.response'])->name('api.v1.')->group(function () {
+
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+    Route::middleware('auth:api')->group(function () {
+
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('index'); //api.v1.users.index
+            Route::post('/store', [UserController::class, 'store'])->name('store');
+            Route::get('/{user:uuid}', [UserController::class, 'edit'])->name('edit');
+            Route::patch('/{user:uuid}', [UserController::class, 'update'])->name('update');
+            Route::delete('/{user:uuid}', [UserController::class, 'destroy'])->name('destroy');
+            Route::get('/restore/{user:uuid}', [UserController::class, 'restore'])->name('restore');
+        });
     });
 });

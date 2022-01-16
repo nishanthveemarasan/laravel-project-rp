@@ -9,7 +9,7 @@ class UserService
 {
     public function index()
     {
-        return User::paginate(10);
+        return User::withTrashed()->paginate(10);
     }
 
     public function store($data)

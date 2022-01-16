@@ -27,14 +27,13 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $this->result = $this->userService->index();
+            $this->result['data'] = $this->userService->index();
         } catch (Exception $e) {
             DB::rollBack();
             $this->result['errors']['message'] = $e->getMessage();
-            $this->code = 500;
         }
 
-        return $this->responseService->result($this->result, $this->code);
+        return $this->result;
     }
 
     public function store(UserStoreRequest $request)
@@ -49,57 +48,53 @@ class UserController extends Controller
             $this->code = 500;
         }
 
-        return $this->responseService->result($this->result, $this->code);
+        return $this->result;
     }
 
     public function edit(User $user)
     {
         try {
-            $this->result = $this->userService->edit($user);
+            $this->result['data'] = $this->userService->edit($user);
         } catch (Exception $e) {
             DB::rollBack();
             $this->result['errors']['message'] = $e->getMessage();
-            $this->code = 500;
         }
 
-        return $this->responseService->result($this->result, $this->code);
+        return $this->result;
     }
 
     public function update(Request $request, User $user)
     {
         try {
-            $this->result = $this->userService->update($request->all(), $user);
+            $this->result['data'] = $this->userService->update($request->all(), $user);
         } catch (Exception $e) {
             DB::rollBack();
             $this->result['errors']['message'] = $e->getMessage();
-            $this->code = 500;
         }
-        return $this->responseService->result($this->result, $this->code);
+        return $this->result;
     }
 
     public function destroy(User $user)
     {
         try {
-            $this->result = $this->userService->delete($user);
+            $this->result['date'] = $this->userService->delete($user);
         } catch (Exception $e) {
             DB::rollBack();
             $this->result['errors']['message'] = $e->getMessage();
-            $this->code = 500;
         }
 
-        return $this->responseService->result($this->result, $this->code);
+        return $this->result;
     }
 
     public function restore($uuid)
     {
         try {
-            $this->result = $this->userService->restore($uuid);
+            $this->result['data'] = $this->userService->restore($uuid);
         } catch (Exception $e) {
             DB::rollBack();
             $this->result['errors']['message'] = $e->getMessage();
-            $this->code = 500;
         }
 
-        return $this->responseService->result($this->result, $this->code);
+        return $this->result;
     }
 }
