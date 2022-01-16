@@ -28,7 +28,7 @@ Route::prefix('v1')->middleware(['json.response'])->name('api.v1.')->group(funct
             Route::get('/{user:uuid}', [UserController::class, 'edit'])->name('edit');
             Route::patch('/{user:uuid}', [UserController::class, 'update'])->name('update');
             Route::delete('/{user:uuid}', [UserController::class, 'destroy'])->name('destroy');
-            Route::get('/restore/{user:uuid}', [UserController::class, 'restore'])->name('restore');
+            Route::get('/restore/{user:uuid}', [UserController::class, 'restore'])->withTrashed()->name('restore');
         });
     });
 });

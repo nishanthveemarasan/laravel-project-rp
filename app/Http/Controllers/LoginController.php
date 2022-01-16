@@ -6,17 +6,17 @@ use Illuminate\Http\Request;
 use App\Services\ResponseService;
 use App\Http\Requests\AuthRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    protected $code = 200;
     protected $apiResponseService;
     protected $result;
     public function __construct(ResponseService $apiResponseService)
     {
         $this->apiResponseService = $apiResponseService;
     }
-    public function login(AuthRequest $request)
+    public function login(Request $request)
     {
         if (Auth::attempt($request->all())) {
             $user = Auth::user();
@@ -24,8 +24,7 @@ class LoginController extends Controller
             $this->result['name'] = $user->first_name;
         } else {
             $this->result['error'] = "Incorrect Login details";
-            $this->code = 500;
         }
-        return $this->apiResponseService->result($this->result, $this->code);
+        return $this->result;
     }
 }

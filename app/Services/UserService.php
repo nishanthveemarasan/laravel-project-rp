@@ -4,6 +4,9 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Jobs\SendUserCreationMailJob;
+use App\Mail\UserCreationSuccessMail;
 
 class UserService
 {
@@ -16,7 +19,11 @@ class UserService
     {
         $data['password'] = Hash::make($data['password']);
 
-        User::create($data);
+        $user = User::create($data);
+
+        $user->assignRole('user');
+
+        SendUserCreationMailJob::dispatch($user);
 
         return ['message' => 'user has been create successfully'];
     }
@@ -39,11 +46,9 @@ class UserService
         return ['message' => 'user has been disabled successfully'];
     }
 
-    public function restore($uuid)
+    public function restore(User $user)
     {
-        $user = User::whereUuid($uuid)
-            ->withTrashed()
-            ->restore();
+        $user->restore();
 
         return ['message' => 'user has been enabld successfully'];
     }

@@ -26,6 +26,7 @@ class UserController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny', User::class);
         try {
             $this->result['data'] = $this->userService->index();
         } catch (Exception $e) {
@@ -38,6 +39,7 @@ class UserController extends Controller
 
     public function store(UserStoreRequest $request)
     {
+        $this->authorize('create');
         try {
             DB::beginTransaction();
             $this->result = $this->userService->store($request->validated());
@@ -53,6 +55,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        $this->authorize('view', $user);
         try {
             $this->result['data'] = $this->userService->edit($user);
         } catch (Exception $e) {
@@ -65,6 +68,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
         try {
             $this->result['data'] = $this->userService->update($request->all(), $user);
         } catch (Exception $e) {
@@ -76,6 +80,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        $this->authorize('delete', $user);
         try {
             $this->result['date'] = $this->userService->delete($user);
         } catch (Exception $e) {
@@ -86,10 +91,12 @@ class UserController extends Controller
         return $this->result;
     }
 
-    public function restore($uuid)
+    public function restore(User $user)
     {
+        $this->authorize('restore', $user);
+
         try {
-            $this->result['data'] = $this->userService->restore($uuid);
+            $this->result['data'] = $this->userService->restore($user);
         } catch (Exception $e) {
             DB::rollBack();
             $this->result['errors']['message'] = $e->getMessage();

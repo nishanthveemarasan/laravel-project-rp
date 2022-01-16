@@ -5,6 +5,7 @@ namespace App\Models;
 use Stringable;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,7 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +41,8 @@ class User extends Authenticatable
         'email_verified_at',
         'id'
     ];
+
+    protected $guard_name = 'api';
 
     /**
      * The attributes that should be cast.
