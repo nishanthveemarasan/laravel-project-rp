@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Services\ResponseService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 
@@ -53,6 +54,11 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        if (Gate::allows('view-user', $user)) {
+            dd('how');
+        } else {
+            dd('hi');
+        };
         try {
             $this->result['data'] = $this->userService->edit($user);
         } catch (Exception $e) {
