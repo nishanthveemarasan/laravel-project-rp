@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserWelcomeEvent;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,12 +12,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Jobs\SendUserCreationMailJob;
+use App\Jobs\sendUserRegistrationEmailJob;
 
 class UserController extends Controller
 {
     private $userService;
-    private $responseService;
-    private $code = 200;
     private $result;
 
     public function __construct(UserService $service, ResponseService $responseService)
@@ -27,6 +28,7 @@ class UserController extends Controller
 
     public function index()
     {
+        $this->authorize('viewAny', User::class);
         try {
             $this->result['data'] = $this->userService->index();
         } catch (Exception $e) {
@@ -39,6 +41,7 @@ class UserController extends Controller
 
     public function store(UserStoreRequest $request)
     {
+        $this->authorize('create', User::class);
         try {
             DB::beginTransaction();
             $this->result = $this->userService->store($request->validated());
@@ -54,11 +57,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        if (Gate::allows('view-user', $user)) {
-            dd('how');
-        } else {
-            dd('hi');
-        };
+        $this->authorize('view', $user);
         try {
             $this->result['data'] = $this->userService->edit($user);
         } catch (Exception $e) {
@@ -71,6 +70,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
         try {
             $this->result['data'] = $this->userService->update($request->all(), $user);
         } catch (Exception $e) {
@@ -82,6 +82,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        $this->authorize('delete', $user);
         try {
             $this->result['date'] = $this->userService->delete($user);
         } catch (Exception $e) {
@@ -94,6 +95,7 @@ class UserController extends Controller
 
     public function restore($uuid)
     {
+        $this->restore('restore', User::class);
         try {
             $this->result['data'] = $this->userService->restore($uuid);
         } catch (Exception $e) {

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Jobs\sendUserRegistrationEmailJob;
 
 class UserService
 {
@@ -16,16 +17,20 @@ class UserService
     {
         $data['password'] = Hash::make($data['password']);
 
-        User::create($data);
+        $user = User::create($data);
 
-        return ['message' => 'user has been create successfully'];
+        $user->assignRole('user');
+
+        sendUserRegistrationEmailJob::dispatch($user);
+
+        return ['message' => 'Your Account has been created Successfully!!. Conformation Email has been sent to your mail!!'];
     }
 
     public function update($data, User $user)
     {
         $user->update($data);
 
-        return ['message' => 'user has been updated successfully'];
+        return ['message' => 'Data updated successfully'];
     }
 
     public function edit(User $user)
