@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Post;
 use App\Models\User;
+use App\Policies\PostPolicy;
 use App\Policies\UserPolicy;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
@@ -17,7 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Models\Model' => 'App\Policies\ModelPolicy',
-        User::class => UserPolicy::class,
+        User::class => UserPolicy::class
     ];
 
     /**
@@ -32,7 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         Passport::routes();
 
         Gate::before(function (User $user) {
-            return $user->hasRole('admin');
+            return $user->isAdmin();
         });
     }
 }

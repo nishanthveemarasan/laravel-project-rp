@@ -10,11 +10,16 @@ return [
         'manager',
     ],
 
+    'types' => [
+        'post'
+    ],
+
     'permissions' => [
-        'view-users',
-        'view-user',
-        'edit-user',
-        'disable-user',
-        'restore-user',
+        'view-all',
+        'view-single',
+        'edit',
+        'update',
+        'disable',
+        'restore',
     ]
 ];

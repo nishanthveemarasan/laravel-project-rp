@@ -39,7 +39,6 @@ class UserController extends Controller
 
     public function store(UserStoreRequest $request)
     {
-        $this->authorize('create');
         try {
             DB::beginTransaction();
             $this->result = $this->userService->store($request->validated());
@@ -55,6 +54,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+
         $this->authorize('view', $user);
         try {
             $this->result['data'] = $this->userService->edit($user);
@@ -68,7 +68,8 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $this->authorize('update', $user);
+        $this->authorize('update', User::class);
+        dd('hi');
         try {
             $this->result['data'] = $this->userService->update($request->all(), $user);
         } catch (Exception $e) {

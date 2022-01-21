@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 class PermissionSeeder extends Seeder
@@ -15,13 +16,22 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $permissions = config('rolePermission.permissions');
+        $types = config('rolePermission.types');
         $guard = config('rolePermission.guard_name');
-        foreach ($permissions as $permission) {
 
-            Permission::create([
-                'name' => $permission,
-                'guard_name' => $guard
-            ]);
+        $roles = Role::all();
+        foreach ($permissions as $permission) {
+            foreach ($types as $type) {
+                $permission = Permission::firstOrCreate([
+                    'name' => $permission . " " . $type,
+                    'guard_name' => $guard
+                ]);
+                foreach ($roles as $role) {
+                    if ($role != 'admin') {
+                        $permission->assignRole($role);
+                    }
+                }
+            }
         }
     }
 }

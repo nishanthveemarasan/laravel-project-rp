@@ -61,4 +61,14 @@ class User extends Authenticatable
             $model->uuid = (string)Str::orderedUuid();
         });
     }
+
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    public function post()
+    {
+        return $this->hasMany(Post::class);
+    }
 }
