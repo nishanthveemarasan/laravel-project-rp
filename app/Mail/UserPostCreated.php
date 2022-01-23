@@ -13,8 +13,18 @@ use Illuminate\Support\Facades\Log;
 class UserPostCreated extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public $post;
+    
+    /**
+     * post
+     *
+     * @var Post
+     */
+    public $post;    
+    /**
+     * user
+     *
+     * @var User
+     */
     public $user;
     /**
      * Create a new message instance.

@@ -17,7 +17,17 @@ class UserPostCreatedEmail
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * post
+     *
+     * @var Post
+     */
     public $post;
+    /**
+     * user
+     *
+     * @var User
+     */
     public $user;
 
     /**

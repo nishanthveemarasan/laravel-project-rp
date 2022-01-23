@@ -9,23 +9,47 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    protected $code = 200;
+    /**
+     * apiResponseService
+     *
+     * @var mixed
+     */
     protected $apiResponseService;
+
+    /**
+     * result
+     *
+     * @var mixed
+     */
     protected $result;
+
+    /**
+     * __construct
+     *
+     * @param  ResponseService $apiResponseService
+     * @return void
+     */
     public function __construct(ResponseService $apiResponseService)
     {
         $this->apiResponseService = $apiResponseService;
     }
+
+    /**
+     * login
+     *
+     * @param  AuthRequest $request
+     * @return void
+     */
     public function login(AuthRequest $request)
     {
         if (Auth::attempt($request->all())) {
             $user = Auth::user();
             $this->result['token'] = $user->createToken('api-application')->accessToken;
             $this->result['name'] = $user->first_name;
+            return $this->apiResponseService->result($this->result, 200);
         } else {
             $this->result['error'] = "Incorrect Login details";
-            $this->code = 500;
+            return $this->apiResponseService->result($this->result, 500);
         }
-        return $this->apiResponseService->result($this->result, $this->code);
     }
 }

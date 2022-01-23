@@ -11,12 +11,27 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * fillable
+     *
+     * @var array
+     */
     protected $fillable = [
         'title', 'content', 'type'
     ];
 
+    /**
+     * with
+     *
+     * @var array
+     */
     protected $with = ['user'];
 
+    /**
+     * boot
+     *
+     * @return void
+     */
     public static function boot()
     {
         parent::boot();
@@ -26,6 +41,11 @@ class Post extends Model
         });
     }
 
+    /**
+     * post belongs to a user
+     *
+     * @return void
+     */
     public function user()
     {
         return $this->belongsTo(User::class);

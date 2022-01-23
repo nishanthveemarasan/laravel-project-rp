@@ -17,9 +17,24 @@ class sendUserPostCreatedMailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * post
+     *
+     * @var Post
+     */
     public $post;
+    /**
+     * user
+     *
+     * @var User
+     */
     public $user;
-
+    
+    /**
+     * after_commit
+     *
+     * @var bool
+     */
     public $after_commit  = true;
     /**
      * Create a new job instance.
