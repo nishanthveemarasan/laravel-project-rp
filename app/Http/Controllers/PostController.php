@@ -64,7 +64,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $this->authorize('viewAny', Post::class);
+        $this->authorize('index', Post::class);
         try {
             $this->result['data'] = $this->postService->index();
         } catch (Exception $e) {

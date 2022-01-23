@@ -69,8 +69,7 @@ class PostService implements PostContract
      */
     public function edit(Post $post)
     {
-
-        return $post;
+        return $post->loadCount('comments');
     }
     /**
      * delete

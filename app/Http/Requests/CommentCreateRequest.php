@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PermissionCreateRequest extends FormRequest
+class CommentCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +13,7 @@ class PermissionCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->isAdmin();
+        return auth()->user()->can('create comment');
     }
 
     /**
@@ -25,8 +24,7 @@ class PermissionCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'permissions' => ['required', 'array'],
-            'roles' => ['nullable', 'array']
+            'comment' => ['required', 'string'],
         ];
     }
 }
