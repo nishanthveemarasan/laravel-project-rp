@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PostController;
@@ -37,20 +38,28 @@ Route::prefix('v1')->middleware(['json.response'])->name('api.v1.')->group(funct
 
 
         Route::prefix('posts')->name('posts.')->group(function () {
-            Route::get('/users/all', [PostController::class, 'index'])->name('index');
+            Route::get('/', [PostController::class, 'index'])->name('index');
+
             Route::prefix('user')->name('user.')->group(function () {
-                Route::get('/all', [PostController::class, 'ownPosts'])->name('ownPosts');
-                Route::get('/{user:uuid}/all', [PostController::class, 'userPosts'])->name('userPosts');
-                Route::get('/{post:uuid}', [PostController::class, 'edit'])->name('edit');
-                Route::patch('/{post:uuid}', [PostController::class, 'update'])->name('update');
-                Route::delete('/{post:uuid}', [PostController::class, 'destroy'])->name('destroy');
-                Route::get('/restore/{post:uuid}', [PostController::class, 'restore'])->withTrashed()->name('restore');
+                Route::get('/', [PostController::class, 'ownPosts'])->name('ownPosts');
+                Route::get('/{user:uuid}', [PostController::class, 'userPosts'])->name('userPosts');
+
+                Route::prefix('post')->name('post.')->group(function () {
+                    Route::get('/{post:uuid}', [PostController::class, 'edit'])->name('edit');
+                    Route::patch('/{post:uuid}', [PostController::class, 'update'])->name('update');
+                    Route::delete('/{post:uuid}', [PostController::class, 'destroy'])->name('destroy');
+                    Route::get('/restore/{post:uuid}', [PostController::class, 'restore'])->withTrashed()->name('restore');
+                });
             });
             Route::post('/store', [PostController::class, 'store'])->name('store');
         });
         Route::prefix('permissions')->name('permissions.')->group(function () {
             Route::post('/add', [PermissionController::class, 'add'])->name('add');
-            Route::post('/remove', [PermissionController::class, 'remove'])->name('add');
+            Route::delete('/remove', [PermissionController::class, 'remove'])->name('remove');
+        });
+
+        Route::prefix('comments', function () {
+            Route::post('/{post:uuid}/store', [CommentController::class, 'store'])->name('store');
         });
     });
 });

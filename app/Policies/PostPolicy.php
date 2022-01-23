@@ -17,9 +17,21 @@ class PostPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
+    public function index(User $user)
+    {
+        return $user->can('view-all posts');
+    }
+
+
+    /**
+     * Determine whether the user can view any models.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
     public function viewAny(User $user)
     {
-        return $user->isAdmin();
+        return $user->can('view user posts');
     }
 
     /**
@@ -31,9 +43,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post)
     {
-        if ($user) {
-            return $user->id === $post->user_id;
-        }
+        return $user->can('view-single post');
     }
 
     /**
@@ -57,9 +67,7 @@ class PostPolicy
      */
     public function ownPosts(User $user)
     {
-        if ($user) {
-            return true;
-        }
+        return $user->can('view own posts');
     }
 
     /**
@@ -71,7 +79,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        if ($user) {
+        if ($user->can('update post')) {
             return $user->id === $post->user_id;
         }
     }
@@ -85,7 +93,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        if ($user) {
+        if ($user->can('delete post')) {
             return $user->id === $post->user_id;
         }
     }
@@ -99,7 +107,7 @@ class PostPolicy
      */
     public function restore(User $user, Post $post)
     {
-        if ($user) {
+        if ($user->can('restore post')) {
             return $user->id === $post->user_id;
         }
     }
