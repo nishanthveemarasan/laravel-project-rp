@@ -13,12 +13,12 @@ return [
         'user',
     ],
 
-    'permissions' => [
-        'view-all',
-        'view-single',
-        'edit',
-        'update',
-        'disable',
-        'restore',
+    "permissions" => [
+        "view-all",
+        "view-single",
+        "edit",
+        "update",
+        "disable",
+        "restore",
     ]
 ];

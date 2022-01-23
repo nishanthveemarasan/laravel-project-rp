@@ -82,7 +82,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        $this->authorize('delete', $user);
+        $this->authorize('delete');
         try {
             $this->result['date'] = $this->userService->delete($user);
         } catch (Exception $e) {
@@ -93,11 +93,11 @@ class UserController extends Controller
         return $this->result;
     }
 
-    public function restore($uuid)
+    public function restore(User $user)
     {
-        $this->restore('restore', User::class);
+        $this->authorize('restore');
         try {
-            $this->result['data'] = $this->userService->restore($uuid);
+            $this->result['data'] = $this->userService->restore($user);
         } catch (Exception $e) {
             DB::rollBack();
             $this->result['errors']['message'] = $e->getMessage();

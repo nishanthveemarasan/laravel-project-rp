@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
+use App\Contracts\UserContract;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Jobs\sendUserRegistrationEmailJob;
 
-class UserService
+class UserService implements UserContract
 {
     public function index()
     {
@@ -44,11 +45,9 @@ class UserService
         return ['message' => 'user has been disabled successfully'];
     }
 
-    public function restore($uuid)
+    public function restore(User $user)
     {
-        $user = User::whereUuid($uuid)
-            ->withTrashed()
-            ->restore();
+        $user->restore();
 
         return ['message' => 'user has been enabld successfully'];
     }
