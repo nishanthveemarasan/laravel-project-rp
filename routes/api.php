@@ -58,8 +58,11 @@ Route::prefix('v1')->middleware(['json.response'])->name('api.v1.')->group(funct
             Route::delete('/remove', [PermissionController::class, 'remove'])->name('remove');
         });
 
-        Route::prefix('comments', function () {
+        Route::prefix('comments')->name('comments.')->group(function () {
+            Route::get('/', [CommentController::class, 'index'])->name('index');
             Route::post('/{post:uuid}/store', [CommentController::class, 'store'])->name('store');
+            Route::delete('/{post:uuid}/{comment:uuid}', [CommentController::class, 'delete'])->name('delete');
+            Route::get('/{post:uuid}/{comment:uuid}', [CommentController::class, 'restore'])->withTrashed()->name('delete');
         });
     });
 });
