@@ -17,15 +17,37 @@ use App\Jobs\sendUserRegistrationEmailJob;
 
 class UserController extends Controller
 {
+    /**
+     * userService
+     *
+     * @var UserService
+     */
     private $userService;
+    /**
+     * result
+     *
+     * @var mixed
+     */
     private $result;
 
+    /**
+     * __construct
+     *
+     * @param  UserService $service
+     * @param  ResponseService $responseService
+     * @return void
+     */
     public function __construct(UserService $service, ResponseService $responseService)
     {
         $this->userService = $service;
         $this->responseService = $responseService;
     }
 
+    /**
+     * index
+     *
+     * @return array
+     */
     public function index()
     {
         $this->authorize('viewAny', User::class);
@@ -39,6 +61,12 @@ class UserController extends Controller
         return $this->result;
     }
 
+    /**
+     * store
+     *
+     * @param  UserStoreRequest $request
+     * @return array
+     */
     public function store(UserStoreRequest $request)
     {
         $this->authorize('create', User::class);
@@ -55,6 +83,12 @@ class UserController extends Controller
         return $this->result;
     }
 
+    /**
+     * edit
+     *
+     * @param  User $user
+     * @return array
+     */
     public function edit(User $user)
     {
         $this->authorize('view', $user);
@@ -68,6 +102,13 @@ class UserController extends Controller
         return $this->result;
     }
 
+    /**
+     * update
+     *
+     * @param  Request $request
+     * @param  User $user
+     * @return array
+     */
     public function update(Request $request, User $user)
     {
         $this->authorize('update', $user);
@@ -80,6 +121,12 @@ class UserController extends Controller
         return $this->result;
     }
 
+    /**
+     * destroy
+     *
+     * @param  User $user
+     * @return array
+     */
     public function destroy(User $user)
     {
         $this->authorize('delete');
@@ -93,6 +140,12 @@ class UserController extends Controller
         return $this->result;
     }
 
+    /**
+     * restore
+     *
+     * @param  User $user
+     * @return array
+     */
     public function restore(User $user)
     {
         $this->authorize('restore');

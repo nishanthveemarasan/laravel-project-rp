@@ -14,7 +14,12 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 class UserWelcomeEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
+    
+    /**
+     * user
+     *
+     * @var User
+     */
     public $user;
     /**
      * Create a new event instance.

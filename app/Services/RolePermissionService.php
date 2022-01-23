@@ -8,6 +8,12 @@ use Spatie\Permission\Models\Permission;
 class RolePermissionService
 {
 
+    /**
+     * addPermission
+     *
+     * @param  array $data
+     * @return array
+     */
     public function addPermission($data)
     {
         foreach ($data['roles'] as $role) {
@@ -19,6 +25,12 @@ class RolePermissionService
         return ['message' => 'Permissions have been added successfully!!'];
     }
 
+    /**
+     * removePermission
+     *
+     * @param  array $data
+     * @return array
+     */
     public function removePermission($data)
     {
         foreach ($data['roles'] as $role) {
@@ -30,6 +42,12 @@ class RolePermissionService
         return ['message' => 'Permissions have been updated successfully!!'];
     }
 
+    /**
+     * createPermission
+     *
+     * @param  string $permission
+     * @return void
+     */
     public function createPermission($permission)
     {
         return Permission::firstOrCreate([

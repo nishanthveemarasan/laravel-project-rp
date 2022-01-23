@@ -52,6 +52,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * boot
+     *
+     * @return void
+     */
     public static function boot()
     {
         parent::boot();
@@ -61,11 +66,21 @@ class User extends Authenticatable
         });
     }
 
+    /**
+     * check if the user is admin
+     *
+     * @return void
+     */
     public function isAdmin()
     {
         return $this->hasRole('admin');
     }
 
+    /**
+     * use has many posts
+     *
+     * @return void
+     */
     public function posts()
     {
         return $this->hasMany(Post::class);

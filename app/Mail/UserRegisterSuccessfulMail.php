@@ -11,7 +11,12 @@ use Illuminate\Queue\SerializesModels;
 class UserRegisterSuccessfulMail extends Mailable
 {
     use Queueable, SerializesModels;
-
+    
+    /**
+     * user
+     *
+     * @var User
+     */
     public $user;
     /**
      * Create a new message instance.

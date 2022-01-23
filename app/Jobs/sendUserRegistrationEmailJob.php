@@ -14,9 +14,19 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 class sendUserRegistrationEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
+    
+    /**
+     * user
+     *
+     * @var User
+     */
     public $user;
-
+    
+    /**
+     * after_commit
+     *
+     * @var bool
+     */
     public $after_commit  = true;
     /**
      * Create a new job instance.
