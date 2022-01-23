@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-use Stringable;
+use App\Models\Post;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -28,6 +27,8 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+    protected $guard_name = 'api';
 
 
     /**
@@ -58,5 +59,15 @@ class User extends Authenticatable
         self::creating(function ($model) {
             $model->uuid = (string)Str::orderedUuid();
         });
+    }
+
+    public function isAdmin()
+    {
+        return $this->hasRole('admin');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 }

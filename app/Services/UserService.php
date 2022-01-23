@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Contracts\UserContract;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Jobs\sendUserRegistrationEmailJob;
 
-class UserService
+class UserService implements UserContract
 {
     public function index()
     {
@@ -16,16 +18,20 @@ class UserService
     {
         $data['password'] = Hash::make($data['password']);
 
-        User::create($data);
+        $user = User::create($data);
 
-        return ['message' => 'user has been create successfully'];
+        $user->assignRole('user');
+
+        sendUserRegistrationEmailJob::dispatch($user);
+
+        return ['message' => 'Your Account has been created Successfully!!. Conformation Email has been sent to your mail!!'];
     }
 
     public function update($data, User $user)
     {
         $user->update($data);
 
-        return ['message' => 'user has been updated successfully'];
+        return ['message' => 'Data updated successfully'];
     }
 
     public function edit(User $user)
@@ -39,11 +45,9 @@ class UserService
         return ['message' => 'user has been disabled successfully'];
     }
 
-    public function restore($uuid)
+    public function restore(User $user)
     {
-        $user = User::whereUuid($uuid)
-            ->withTrashed()
-            ->restore();
+        $user->restore();
 
         return ['message' => 'user has been enabld successfully'];
     }
