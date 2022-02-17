@@ -15,7 +15,7 @@ class ResponseService
      * @return Response
      * 
      */
-    public function result($data, $code = 200)
+    public function result($data = [], $code = 200)
     {
         $result = [
             'status' => $code,
