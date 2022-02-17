@@ -2,12 +2,20 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Response;
 
 class ResponseService
 {
 
-    public function result($data, $code = 200)
+    /**
+     * result
+     *
+     * @param  mixed $data
+     * @param  mixed $code
+     * @return Response
+     * 
+     */
+    public function result($data = [], $code = 200)
     {
         $result = [
             'status' => $code,

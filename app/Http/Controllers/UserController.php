@@ -2,28 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserWelcomeEvent;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Services\ResponseService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Jobs\SendUserCreationMailJob;
+use App\Jobs\sendUserRegistrationEmailJob;
 
 class UserController extends Controller
 {
+    /**
+     * userService
+     *
+     * @var UserService
+     */
     private $userService;
-    private $responseService;
-    private $code = 200;
+    /**
+     * result
+     *
+     * @var mixed
+     */
     private $result;
 
+    /**
+     * __construct
+     *
+     * @param  UserService $service
+     * @param  ResponseService $responseService
+     * @return void
+     */
     public function __construct(UserService $service, ResponseService $responseService)
     {
         $this->userService = $service;
         $this->responseService = $responseService;
     }
 
+    /**
+     * index
+     *
+     * @return array
+     */
     public function index()
     {
         $this->authorize('viewAny', User::class);
@@ -37,9 +61,19 @@ class UserController extends Controller
         return $this->result;
     }
 
+    /**
+     * store
+     *
+     * @param  UserStoreRequest $request
+     * @return array
+     */
     public function store(UserStoreRequest $request)
     {
+<<<<<<< HEAD
         $this->authorize('create');
+=======
+        $this->authorize('create', User::class);
+>>>>>>> manage-product
         try {
             DB::beginTransaction();
             $this->result = $this->userService->store($request->validated());
@@ -53,6 +87,12 @@ class UserController extends Controller
         return $this->result;
     }
 
+    /**
+     * edit
+     *
+     * @param  User $user
+     * @return array
+     */
     public function edit(User $user)
     {
         $this->authorize('view', $user);
@@ -66,6 +106,13 @@ class UserController extends Controller
         return $this->result;
     }
 
+    /**
+     * update
+     *
+     * @param  Request $request
+     * @param  User $user
+     * @return array
+     */
     public function update(Request $request, User $user)
     {
         $this->authorize('update', $user);
@@ -78,9 +125,19 @@ class UserController extends Controller
         return $this->result;
     }
 
+    /**
+     * destroy
+     *
+     * @param  User $user
+     * @return array
+     */
     public function destroy(User $user)
     {
+<<<<<<< HEAD
         $this->authorize('delete', $user);
+=======
+        $this->authorize('delete');
+>>>>>>> manage-product
         try {
             $this->result['date'] = $this->userService->delete($user);
         } catch (Exception $e) {
@@ -91,10 +148,22 @@ class UserController extends Controller
         return $this->result;
     }
 
+<<<<<<< HEAD
     public function restore(User $user)
     {
         $this->authorize('restore', $user);
 
+=======
+    /**
+     * restore
+     *
+     * @param  User $user
+     * @return array
+     */
+    public function restore(User $user)
+    {
+        $this->authorize('restore');
+>>>>>>> manage-product
         try {
             $this->result['data'] = $this->userService->restore($user);
         } catch (Exception $e) {

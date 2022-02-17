@@ -14,8 +14,13 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
+<<<<<<< HEAD
         $roles = config('rolePermission.roles');
         $guard = config('rolePermission.guard_name');
+=======
+        $roles = config('role.roles');
+        $guard = config('role.guard_name');
+>>>>>>> manage-product
         foreach ($roles as $role) {
 
             Role::create([
